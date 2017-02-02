@@ -4,7 +4,11 @@
 import React, { Component } from 'react';
 import { View, Text, NavigationExperimental } from 'react-native';
 
-const { CardStack: NavigationCardStack, StateUtils: NavigationStateUtils } = NavigationExperimental;
+const {
+  CardStack: NavigationCardStack,
+  Header: NavigationHeader,
+  StateUtils: NavigationStateUtils
+} = NavigationExperimental;
 
 let styles = {};
 
@@ -44,8 +48,40 @@ function reducer(state, action, route) {
   }
 }
 
+class Header extends Component {
+  _renderTitleComponent = (props) => {
+    return (
+      <NavigationHeader.Title>
+        {props.scene.route.key}
+      </NavigationHeader.Title>
+    )
+  }
+  _back = () => {
+    this.props.navigate('pop');
+  }
+
+  render() {
+    return (
+      <NavigationHeader
+        {...this.props}
+        renderTitleComponent={this._renderTitleComponent}
+        onNavigateBack={this._back}
+      />
+    )
+  }
+}
+
 class NavigationCardstackExample extends Component {
   state = { navState: reducer() }
+
+  _renderHeader = (sceneProps) => {
+    return (
+      <Header
+        navigate={this._navigate}
+        {...sceneProps}
+      />
+    )
+  }
 
   _renderScene = (props) => {
     switch (props.scene.route.key) {
@@ -64,6 +100,7 @@ class NavigationCardstackExample extends Component {
   render() {
     return (
       <NavigationCardStack
+        renderHeader={this._renderHeader}
         navigationState={ this.state.navState }
         renderScene={ this._renderScene }
       />
