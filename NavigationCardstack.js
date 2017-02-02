@@ -12,7 +12,9 @@ const {
 
 let styles = {};
 
-const Home = ({ navigate }) => {  // 引数をブレースでくくる必要性は？
+const Home = ({ navigate }) => {
+  // 引数をブレースでくくる必要性は？→括らないと、navigate が関数と解釈されず(オブジェクトと解釈され)
+  // onPress の navigate がコケる
   return (
     <View style={styles.container}>
       <Text>Hello from Home</Text>
@@ -94,7 +96,7 @@ class NavigationCardstackExample extends Component {
 
   _navigate = (action, route) => {
     const navState = reducer(this.state.navState, action, route);
-    this.setState({ navState });
+    this.setState({ navState });  // ブレースで括らないと正常に更新されない
   }
 
   render() {

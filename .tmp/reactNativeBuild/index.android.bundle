@@ -67935,11 +67935,17 @@ __d(/* sample/NavigationCardstack.js */function(global, require, module, exports
 var _react=require(12 /* react */);var _react2=babelHelpers.interopRequireDefault(_react);
 var _reactNative=require(42 /* react-native */);var
 
-NavigationCardStack=_reactNative.NavigationExperimental.CardStack;
+
+NavigationCardStack=_reactNative.NavigationExperimental.CardStack,
+NavigationHeader=_reactNative.NavigationExperimental.Header,
+NavigationStateUtils=_reactNative.NavigationExperimental.StateUtils;
+
 
 var styles={};
 
 var Home=function Home(_ref){var navigate=_ref.navigate;
+
+
 return(
 _react2.default.createElement(_reactNative.View,{style:styles.container},
 _react2.default.createElement(_reactNative.Text,null,'Hello from Home'),
@@ -67965,53 +67971,71 @@ routes:[{key:'Home'}]};
 
 switch(action){
 case'push':{
-var routes=state.routes.slice();
-routes.push(route);
-return babelHelpers.extends({},
-state,{
-index:routes.length-1,
-routes:routes});
-
+return NavigationStateUtils.push(state,route);
 }
 case'pop':{
-if(state.index<=0){
-return state;
-}
-
-var _routes=state.routes.slice(0,-1);
-return babelHelpers.extends({},
-state,{
-index:_routes.length-1,
-routes:_routes});
-
+return NavigationStateUtils.pop(state);
 }
 default:
 return state;}
 
 }var
 
-NavigationCardstackExample=function(_Component){babelHelpers.inherits(NavigationCardstackExample,_Component);function NavigationCardstackExample(){var _ref3;var _temp,_this,_ret;babelHelpers.classCallCheck(this,NavigationCardstackExample);for(var _len=arguments.length,args=Array(_len),_key=0;_key<_len;_key++){args[_key]=arguments[_key];}return _ret=(_temp=(_this=babelHelpers.possibleConstructorReturn(this,(_ref3=NavigationCardstackExample.__proto__||Object.getPrototypeOf(NavigationCardstackExample)).call.apply(_ref3,[this].concat(args))),_this),_this.
-state={navState:reducer()},_this.
+Header=function(_Component){babelHelpers.inherits(Header,_Component);function Header(){var _ref3;var _temp,_this,_ret;babelHelpers.classCallCheck(this,Header);for(var _len=arguments.length,args=Array(_len),_key=0;_key<_len;_key++){args[_key]=arguments[_key];}return _ret=(_temp=(_this=babelHelpers.possibleConstructorReturn(this,(_ref3=Header.__proto__||Object.getPrototypeOf(Header)).call.apply(_ref3,[this].concat(args))),_this),_this.
+_renderTitleComponent=function(props){
+return(
+_react2.default.createElement(NavigationHeader.Title,null,
+props.scene.route.key));
+
+
+},_this.
+_back=function(){
+_this.props.navigate('pop');
+},_temp),babelHelpers.possibleConstructorReturn(_this,_ret);}babelHelpers.createClass(Header,[{key:'render',value:function render()
+
+{
+return(
+_react2.default.createElement(NavigationHeader,babelHelpers.extends({},
+this.props,{
+renderTitleComponent:this._renderTitleComponent,
+onNavigateBack:this._back})));
+
+
+}}]);return Header;}(_react.Component);var
+
+
+NavigationCardstackExample=function(_Component2){babelHelpers.inherits(NavigationCardstackExample,_Component2);function NavigationCardstackExample(){var _ref4;var _temp2,_this2,_ret2;babelHelpers.classCallCheck(this,NavigationCardstackExample);for(var _len2=arguments.length,args=Array(_len2),_key2=0;_key2<_len2;_key2++){args[_key2]=arguments[_key2];}return _ret2=(_temp2=(_this2=babelHelpers.possibleConstructorReturn(this,(_ref4=NavigationCardstackExample.__proto__||Object.getPrototypeOf(NavigationCardstackExample)).call.apply(_ref4,[this].concat(args))),_this2),_this2.
+state={navState:reducer()},_this2.
+
+_renderHeader=function(sceneProps){
+return(
+_react2.default.createElement(Header,babelHelpers.extends({
+navigate:_this2._navigate},
+sceneProps)));
+
+
+},_this2.
 
 _renderScene=function(props){
 switch(props.scene.route.key){
 case'Home':
-return _react2.default.createElement(Home,{navigate:_this._navigate});
+return _react2.default.createElement(Home,{navigate:_this2._navigate});
 case'About':
-return _react2.default.createElement(About,{navigate:_this._navigate});}
+return _react2.default.createElement(About,{navigate:_this2._navigate});}
 
-},_this.
+},_this2.
 
 _navigate=function(action,route){
-var navState=reducer(_this.state.navState,action,route);
-_this.setState({navState:navState});
-},_temp),babelHelpers.possibleConstructorReturn(_this,_ret);}babelHelpers.createClass(NavigationCardstackExample,[{key:'render',value:function render()
+var navState=reducer(_this2.state.navState,action,route);
+var navState2={navState:navState};
+_this2.setState(navState2);
+},_temp2),babelHelpers.possibleConstructorReturn(_this2,_ret2);}babelHelpers.createClass(NavigationCardstackExample,[{key:'render',value:function render()
 
-{var
-navState=this.state.navState;
+{
 return(
 _react2.default.createElement(NavigationCardStack,{
-navigationState:navState,
+renderHeader:this._renderHeader,
+navigationState:this.state.navState,
 renderScene:this._renderScene}));
 
 
