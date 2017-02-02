@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { View, Text, NavigationExperimental } from 'react-native';
 
-const { CardStack: NavigationCardStack } = NavigationExperimental;
+const { CardStack: NavigationCardStack, StateUtils: NavigationStateUtils } = NavigationExperimental;
 
 let styles = {};
 
@@ -34,25 +34,10 @@ function reducer(state, action, route) {
 
   switch (action) {
     case 'push': {
-      const routes = state.routes.slice();  // 新しい配列を生成
-      routes.push(route);
-      return {
-        ...state, // この記述の意味が不明。文法的にも意味不明だし、ロジック的にも不明(この行削除しても動作する)
-        index: routes.length - 1,
-        routes
-      }
+      return NavigationStateUtils.push(state, route);
     }
     case 'pop': {
-      if (state.index <= 0) {
-        return state;
-      }
-
-      const routes = state.routes.slice(0, -1); // 新しい配列を生成
-      return {
-        ...state,
-        index: routes.length - 1,
-        routes
-      }
+      return NavigationStateUtils.pop(state);
     }
     default:
       return state;
@@ -77,10 +62,9 @@ class NavigationCardstackExample extends Component {
   }
 
   render() {
-    const { navState } = this.state;
     return (
       <NavigationCardStack
-        navigationState={ navState }
+        navigationState={ this.state.navState }
         renderScene={ this._renderScene }
       />
     )
